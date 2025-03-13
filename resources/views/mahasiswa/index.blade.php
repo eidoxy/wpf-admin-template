@@ -9,21 +9,21 @@
     </div>
 
     <div class="section-body">
-      <h2 class="section-title">This is Example Page</h2>
-      <p class="section-lead">This page is just an example for you to create your own page.</p>
+      <h2 class="section-title">Halaman Data Mahasiswa</h2>
+      <p class="section-lead">Ini adalah halaman mahasiswa untuk manajemen data mahasiswa.</p>
 
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12">
           <div class="card card-statistic-2">
             <div class="card-icon shadow-primary bg-primary">
-              <i class="fas fa-shopping-bag"></i>
+              <i class="fas fa-users"></i>
             </div>
             <div class="card-wrap">
               <div class="card-header">
                 <h4>Total Mahasiswa</h4>
               </div>
               <div class="card-body">
-                4,732
+                {{ $totalMahasiswa }}
               </div>
             </div>
           </div>
@@ -31,14 +31,14 @@
         <div class="col-lg-6 col-md-6 col-sm-12">
           <div class="card card-statistic-2">
             <div class="card-icon shadow-primary bg-primary">
-              <i class="fas fa-shopping-bag"></i>
+              <i class="fas fa-user-plus"></i>
             </div>
             <div class="card-wrap">
               <div class="card-header">
                 <h4>Mahasiswa Aktif</h4>
               </div>
               <div class="card-body">
-                4,732
+                {{  $mahasiswaAktif }}
               </div>
             </div>
           </div>
@@ -49,7 +49,7 @@
         <div class="card-header">
           <h4>Tabel Data Mahasiswa</h4>
           <div class="card-header-action">
-            <a href="#" class="btn btn-primary">
+            <a href="{{ route('mahasiswa.create') }}" class="btn btn-primary">
               <span class="text-2xl">+</span>
               <span>New Mahasiswa</span>
             </a>
@@ -67,19 +67,22 @@
                 <th>No HP</th>
                 <th class="text-center">Action</th>
               </tr>
+              @foreach ($mahasiswa as $mhs)
               <tr>
-                <td>1</td>
-                <td>Adrian Sondang</td>
-                <td>3123500038</td>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $mhs->nama }}</td>
+                <td>{{ $mhs->nrp }}</td>
                 <td>
-                  <div class="badge badge-success">Active</div>
+                  <div class="badge {{ $mhs->status == 'Aktif' ? 'badge-success' : 'badge-danger' }}">{{ $mhs->status }}</div>
                 </td>
-                <td>Sidoarjo</td>
-                <td>0895350353300</td>
+                <td>{{ $mhs->alamat }}</td>
+                <td>{{ $mhs->no_hp }}</td>
                 <td class="text-center">
                   <a class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="" data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a>
                   <a class="btn btn-danger btn-action trigger--fire-modal-3" data-toggle="tooltip" title="" data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?" data-confirm-yes="alert('Deleted')" data-original-title="Delete"><i class="fas fa-trash"></i></a>
                 </td>
+              </tr>
+              @endforeach
             </tbody></table>
           </div>
         </div>

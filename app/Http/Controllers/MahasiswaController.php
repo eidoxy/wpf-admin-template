@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+use App\Models\Mahasiswa;
 
 class MahasiswaController extends Controller
 {
@@ -11,7 +14,12 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        return view('mahasiswa.index');
+        $mahasiswa = Mahasiswa::all();
+
+        $totalMahasiswa = Mahasiswa::count();
+        $mahasiswaAktif = Mahasiswa::where('status', 'aktif')->count();
+        
+        return view('mahasiswa.index', compact('mahasiswa', 'totalMahasiswa', 'mahasiswaAktif'));
     }
 
     /**
@@ -19,7 +27,7 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        //
+        return view('mahasiswa.create');
     }
 
     /**
@@ -27,7 +35,29 @@ class MahasiswaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'nrp' => 'required|string|unique:mahasiswa,nrp',
+            'nama' => 'required|string',
+            'status' => 'required|in:aktif,tidak aktif',
+            'alamat' => 'nullable|string',
+            'no_hp' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        Mahasiswa::create([
+            'nrp' => $data['nrp'],
+            'nama' => $data['nama'],
+            'status' => $data['status'],
+            'alamat' => $data['alamat'],
+            'no_hp' => $data['no_hp'],
+        ]);
+
+        return redirect()->route('mahasiswa.index')->with('success', 'Data mahasiswa berhasil ditambahkan.');
     }
 
     /**
